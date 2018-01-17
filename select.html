@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Dynamic select input</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            font-weight: 400;
+            color: #333;
+            font-size: 13px;
+            display: inline-block;
+            line-height: 1.4;
+            padding-top: 5px;
+            padding-bottom: 8px;
+            margin-bottom: 0px;
+        }
+        
+        .form-control {
+            border-radius: 3px;
+            box-shadow: none;
+            border: 1px solid #e7e7e7;
+        }
+        
+        .form-control {
+            display: block;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+        
+        select {
+            text-transform: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="form-group">
+            <label for="state-of-origin">State of Origin</label>
+            <select name="state" id="state" class="form-control">
+                <option value="">Select State</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="form-group">
+            <label for="lga">Local Government Area</label>
+            <select name="lga" id="lga" class="form-control">
+                <option value="">Select LGA</option>
+            </select>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        // For the Dynamic state and LGA selection
+        $(document).ready(function() {
+            load_state_data();
+            $('#state').change(function() {
+                load_lga_data($(this).val());
+            })
+
+            function load_lga_data(state) {
+                $.getJSON('state-lga.json', function(data) {
+                    html_code = "<option value=''>Select LGA</option>";
+                    $.each(data[state], function(key, value) {
+                        html_code += '<option value="' + value + '">' + value + '</option>';
+                    })
+                    $('#lga').empty();
+                    $('#lga').html(html_code);
+                })
+            }
+
+            function load_state_data() {
+                $.getJSON('state-lga.json', function(data) {
+                    html_code = "<option value=''>Select State</option>";
+                    $.each(data, function(key, value) {
+                        html_code += '<option value="' + key + '">' + key + '</option>';
+                    })
+                    $('#state').empty();
+                    $('#state').html(html_code);
+                })
+            }
+        });
+    </script>
+</body>
+
+</html>
